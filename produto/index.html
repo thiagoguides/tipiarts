@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Produto - Tip Arts MDF</title>
+
+    <!-- FontAwesome (Ícones) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="/fotos/logo.ico">
+    <!-- Criptografia CryptoJS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+
+    <!-- CSS Geral -->
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+    <!-- Container do Topo (Reutilizado via Construtor) -->
+    <div id="app-topo"></div>
+
+    <!-- Container dos Detalhes do Produto -->
+    <div id="app-produto-detalhe"></div>
+
+    <!-- Container do Rodapé (Reutilizado via Construtor) -->
+    <div id="app-rodape"></div>
+
+    <!-- MODAL DO CARRINHO -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h3><i class="fa-solid fa-bag-shopping"></i> Seu Pedido</h3>
+                <button class="close-cart" id="cartCloseBtn">&times;</button>
+            </div>
+            <div class="cart-items" id="cartItems"></div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <span>Total Estimado:</span>
+                    <span id="cartTotal">R$ 0,00</span>
+                </div>
+                <button class="whatsapp-btn" onclick="sendToWhatsApp()">
+                    <i class="fa-brands fa-whatsapp"></i> Enviar Pedido via WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts Modularizados -->
+<script src="/core/state.js"></script>
+<script src="/core/security.js"></script>
+<script src="/components/theme.js"></script>
+<script src="/components/carousel.js"></script>
+<script src="/components/modalAjustes.js"></script>
+<script src="/components/header.js"></script>
+<script src="/components/cart.js"></script>
+<script src="/construtor.js"></script>
+<script src="/produto/produto.js"></script> <!-- Script específico da página de produto -->
+</body>
+</html>

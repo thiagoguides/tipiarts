@@ -1,0 +1,67 @@
+<main class="product-detail-container">
+    <!-- SEÇÃO PRINCIPAL DO PRODUTO -->
+    <div class="product-main-card">
+        <!-- Coluna da Esquerda: Galeria de Fotos (Miniaturas + Principal) -->
+        <div class="product-gallery">
+            <div class="main-image-container">
+                <img id="mainProductImage" src="" alt="Foto do Produto">
+            </div>
+            <!-- Container das miniaturas (gerado via JS se houver mais de uma foto) -->
+            <div class="thumbnail-gallery" id="thumbnailGallery"></div>
+        </div>
+
+        <!-- Coluna da Direita: Informações e Compra -->
+        <div class="product-buy-info">
+            <!-- Tags de Categorias Clicáveis -->
+            <div id="productCategoriesContainer" class="category-badges-container">
+                <!-- Preenchido via JS -->
+            </div>
+
+            <h1 id="productTitle" class="product-detail-title">Nome do Produto</h1>
+            
+            <div class="product-detail-price" id="productPriceArea">
+                R$ 0,00
+            </div>
+
+            <div class="product-measures-box">
+                <i class="fa-solid fa-ruler-combined"></i> Medidas: <span id="productMeasures">--</span>
+            </div>
+
+            <div class="product-description-short" id="productDescShort">
+                Descrição breve do produto...
+            </div>
+
+            <div class="product-actions-box">
+                <div class="quantity-selector">
+                    <label>Quantidade:</label>
+                    <div class="qty-controls">
+                        <button onclick="alterarQtdDetalhe(-1)">-</button>
+                        <span id="inputQtdProduto">1</span>
+                        <button onclick="alterarQtdDetalhe(1)">+</button>
+                    </div>
+                </div>
+
+                <button class="btn-add-cart-large" onclick="adicionarProdutoAtualAoCarrinho()">
+                    <i class="fa-solid fa-cart-plus"></i> Adicionar ao Carrinho
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEÇÃO DE DESCRIÇÃO COMPLETA -->
+    <div class="product-description-full-card">
+        <h3><i class="fa-solid fa-circle-info"></i> Descrição Completa</h3>
+        <p id="productDescFull">Descrição detalhada do produto...</p>
+    </div>
+
+    <!-- SEÇÃO DE RECOMENDAÇÕES -->
+    <section class="recommendations-section">
+        <div class="section-header">
+            <h2 class="section-title"><i class="fa-solid fa-thumbs-up"></i> Produtos Relacionados</h2>
+        </div>
+
+        <div class="product-grid" id="recommendationsGrid">
+            <!-- Preenchido via JS -->
+        </div>
+    </section>
+</main>

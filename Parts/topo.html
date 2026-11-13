@@ -1,0 +1,94 @@
+<!-- CABEÇALHO EXISTENTE -->
+<header>
+    <div class="header-container">
+        <a href="/" class="logo">
+            <img src="/fotos/logo.ico" height="45"/>
+            Tipi <span>Arts</span>
+        </a>
+
+        <div class="search-box-wrapper" style="position: relative; flex: 1; max-width: 600px;">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Buscar caixas, lembrancinhas, organizadores...">
+                <button title="Buscar" id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+            <div id="searchDropdown" class="search-dropdown" style="display: none;"></div>
+        </div>
+
+        <div class="header-actions">
+            <button class="icon-btn" id="themeToggleBtn" title="Alternar Tema">
+                <i class="fa-solid fa-moon" id="themeIcon"></i>
+                <span>Tema</span>
+            </button>
+
+            <!-- Botão de Ajustes que abre o Modal -->
+            <button class="icon-btn" id="ajustesOpenBtn" title="Configurações e Acesso Lojista">
+                <i class="fa-solid fa-gear"></i>
+                <span>Ajustes</span>
+            </button>
+
+            <button class="icon-btn" id="cartOpenBtn" title="Carrinho">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span>Carrinho</span>
+                <span class="cart-count" id="cartCount">0</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- JANELA MODAL DE AJUSTES E CADASTRO -->
+<div class="modal-overlay" id="ajustesModal" style="display: none;">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3><i class="fa-solid fa-user-gear"></i> Painel do Lojista & Ajustes</h3>
+            <button class="modal-close" id="ajustesCloseBtn">&times;</button>
+        </div>
+        
+        <div class="modal-body">
+            <!-- SEÇÃO 1: ACESSO E PREÇOS -->
+            <div class="modal-section">
+                <h4><i class="fa-solid fa-lock"></i> Acesso aos Preços (Atacado)</h4>
+                <p class="modal-desc" id="statusAcessoText">Status: <strong style="color: #e74c3c;">Preços Ocultos / Senha Necessária</strong></p>
+                
+                <div class="input-group" id="divFormSenha">
+                    <input type="password" id="senhaLojistaInput" placeholder="Digite a senha mestra...">
+                    <button class="btn-primary" onclick="tentarDescriptografarPrecos()">Desbloquear Preços</button>
+                </div>
+
+                <div id="divModoVitrine" style="display: none; margin-top: 10px;">
+                    <button class="btn-secondary" onclick="alternarModoVitrine()" style="width: 100%; background: #e67e22; color: #fff;">
+                        <i class="fa-solid fa-eye-slash"></i> <span id="txtModoVitrine">Esconder Preços (Modo Vitrine Balcão)</span>
+                    </button>
+                </div>
+            </div>
+
+            <hr class="modal-divider">
+
+            <!-- MODAL DE AJUSTES / ACESSO DO LOJISTA -->
+            <div class="modal-overlay" id="ajustesModal" style="display: none;">
+                <div class="modal-content" style="max-width: 400px; padding: 25px; border-radius: 8px; background: var(--bg-main); color: var(--text-dark);">
+                    <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3 style="margin: 0; font-size: 1.2rem;"><i class="fa-solid fa-lock"></i> Acesso do Lojista</h3>
+                        <button id="ajustesCloseBtn" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-dark);">&times;</button>
+                    </div>
+
+                    <div class="modal-body">
+                        <!-- Status Atual -->
+                        <p id="statusAcessoText" style="margin-bottom: 15px; font-size: 0.95rem;">Status: Carregando...</p>
+
+                        <!-- Formulário de Senha (Exibido quando bloqueado) -->
+                        <div id="divFormSenha" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px;">
+                            <label for="senhaLojistaInput" style="font-size: 0.85rem; font-weight: 600;">Digite a senha de liberação:</label>
+                            <input type="password" id="senhaLojistaInput" placeholder="Insira a senha" style="padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-input); color: var(--text-dark);">
+                            <button onclick="tentarDescriptografarPrecos()" style="padding: 10px; background: var(--accent); color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">Liberar Preços</button>
+                        </div>
+
+                        <!-- Botão de Modo Vitrine (Exibido quando liberado) -->
+                        <div id="divModoVitrine" style="display: none;">
+                            <button onclick="alternarModoVitrine()" id="txtModoVitrine" style="width: 100%; padding: 10px; background: #e67e22; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

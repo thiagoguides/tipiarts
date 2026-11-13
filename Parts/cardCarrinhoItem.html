@@ -1,0 +1,14 @@
+<div class="cart-item" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color);">
+    <div style="flex: 1;">
+        <div class="cart-item-title" style="font-size: 0.9rem; font-weight: 600;">{{nome}}</div>
+        <div class="cart-item-price" style="font-size: 0.85rem; color: var(--text-muted);">{{precoFormatado}}</div>
+    </div>
+    
+    <div style="display: flex; align-items: center; gap: 8px; margin: 0 10px;">
+        <button onclick="alterarQuantidade({{id}}, -1)" style="background: var(--bg-main); border: 1px solid var(--border-color); color: var(--text-dark); width: 24px; height: 24px; border-radius: 4px; cursor: pointer; font-weight: bold;">-</button>
+        <span style="font-size: 0.9rem; font-weight: 600; min-width: 20px; text-align: center;">{{quantidade}}</span>
+        <button onclick="alterarQuantidade({{id}}, 1)" style="background: var(--bg-main); border: 1px solid var(--border-color); color: var(--text-dark); width: 24px; height: 24px; border-radius: 4px; cursor: pointer; font-weight: bold;">+</button>
+    </div>
+
+    <strong style="color: var(--accent); min-width: 70px; text-align: right;">{{subtotalFormatado}}</strong>
+</div>

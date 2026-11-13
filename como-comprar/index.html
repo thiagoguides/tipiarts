@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Área do Lojista - Tip Arts</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="icon" type="image/png" href="/fotos/logo.ico">
+</head>
+<body>
+
+    <!-- Cabeçalho Modular -->
+    <div id="app-topo"></div>
+
+    <main class="container" style="max-width: 1200px; margin: 40px auto; padding: 0 20px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start;">
+            
+            <!-- Coluna da Esquerda: Explicação (Usando --card-bg para destacar do fundo --bg-main) -->
+            <div style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 30px; color: var(--text-dark); box-shadow: 0 4px 12px var(--shadow);">
+                <h1 style="margin-bottom: 20px; font-size: 1.6rem; color: var(--accent);"><i class="fa-solid fa-store"></i> Área Exclusiva para Lojistas</h1>
+                
+                <p style="margin-bottom: 15px; line-height: 1.6;">
+                    A <strong>Tip Arts</strong> fabrica caixas e artigos em MDF cortados a laser com alto padrão de qualidade voltados para revendedores e lojistas.
+                </p>
+                
+                <p style="margin-bottom: 20px; line-height: 1.6;">
+                    Por trabalharmos com condições especiais de atacado, a tabela de preços é restrita a parceiros cadastrados.
+                </p>
+
+                <h3 style="font-size: 1.1rem; margin-bottom: 10px; color: var(--text-dark);"><i class="fa-solid fa-list-check"></i> Como funciona?</h3>
+                <ol style="margin-left: 20px; margin-bottom: 20px; line-height: 1.7; font-size: 0.95rem; color: var(--text-muted);">
+                    <li>Preencha o cadastro ao lado com os dados da sua loja.</li>
+                    <li>Receba sua senha de liberação para ver os preços no site.</li>
+                    <li>Monte seu carrinho e envie o pedido direto pelo WhatsApp.</li>
+                </ol>
+
+                <div style="background: var(--bg-main); border: 1px solid var(--border-color); padding: 15px; border-left: 4px solid var(--accent); border-radius: 4px; font-size: 0.85rem; line-height: 1.5; color: var(--text-muted);">
+                    <i class="fa-solid fa-circle-info" style="color: var(--accent);"></i> 
+                    <strong>Nota sobre o pedido:</strong> O código gerado no WhatsApp é técnico para integrar direto com o nosso sistema, garantindo agilidade no seu atendimento!
+                </div>
+            </div>
+
+            <!-- Coluna da Direita: Formulário (Também usando --card-bg) -->
+            <div style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 30px; color: var(--text-dark); box-shadow: 0 4px 12px var(--shadow);">
+                <h2 style="font-size: 1.3rem; margin-bottom: 15px;"><i class="fa-solid fa-file-pen"></i> Solicitar Cadastro</h2>
+                <p style="margin-bottom: 20px; font-size: 0.85rem; color: var(--text-muted);">Preencha os campos abaixo para liberar o seu acesso:</p>
+
+                <form id="formCadastroLojista" onsubmit="enviarCadastroWhatsApp(event)" style="display: flex; flex-direction: column; gap: 12px;">
+                    <div>
+                        <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">Nome da Empresa / Lojista *</label>
+                        <input type="text" id="cadNome" required placeholder="Nome do seu negócio" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-main); color: var(--text-dark);">
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div>
+                            <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">Responsável *</label>
+                            <input type="text" id="cadResponsavel" required placeholder="Seu nome" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-main); color: var(--text-dark);">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">WhatsApp *</label>
+                            <input type="tel" id="cadTelefone" required placeholder="(43) 99999-9999" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-main); color: var(--text-dark);">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">Tipo de Comércio *</label>
+                        <input type="text" id="cadTipoComercio" required placeholder="Ex: Loja de Artesanato, Papelaria..." style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-main); color: var(--text-dark);">
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">Endereço (Cidade/Estado) *</label>
+                        <input type="text" id="cadEndereco" required placeholder="Cidade - PR" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-main); color: var(--text-dark);">
+                    </div>
+
+                    <button type="submit" style="margin-top: 10px; padding: 12px; background: var(--whatsapp-color); color: #fff; border: none; border-radius: 4px; font-weight: bold; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <i class="fa-brands fa-whatsapp" style="font-size: 1.1rem;"></i> Enviar Cadastro via WhatsApp
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Rodapé Modular -->
+    <div id="app-rodape"></div>
+
+    <!-- MODAL DO CARRINHO (Necessário em todas as páginas para abrir ao clicar no topo) -->
+    <div class="cart-modal" id="cartModal" style="display: none;">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h3><i class="fa-solid fa-bag-shopping"></i> Seu Pedido</h3>
+                <button class="close-cart" id="cartCloseBtn">&times;</button>
+            </div>
+            <div class="cart-items" id="cartItems"></div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <span>Total Estimado:</span>
+                    <span id="cartTotal">R$ 0,00</span>
+                </div>
+                <button class="whatsapp-btn" onclick="sendToWhatsApp()">
+                    <i class="fa-brands fa-whatsapp"></i> Enviar Pedido via WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE AJUSTES (Necessário para a senha do lojista) -->
+    <div class="modal-overlay" id="ajustesModal" style="display: none;">
+        <div class="modal-content" style="max-width: 400px; padding: 25px; border-radius: 8px; background: var(--card-bg); color: var(--text-dark);">
+            <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="margin: 0; font-size: 1.2rem;"><i class="fa-solid fa-lock"></i> Acesso do Lojista</h3>
+                <button id="ajustesCloseBtn" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-dark);">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="statusAcessoText" style="margin-bottom: 15px; font-size: 0.95rem;">Status: Carregando...</p>
+                <div id="divFormSenha" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px;">
+                    <label for="senhaLojistaInput" style="font-size: 0.85rem; font-weight: 600;">Digite a senha de liberação:</label>
+                    <input type="password" id="senhaLojistaInput" placeholder="Insira a senha" style="padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-main); color: var(--text-dark);">
+                    <button onclick="tentarDescriptografarPrecos()" style="padding: 10px; background: var(--accent); color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">Liberar Preços</button>
+                </div>
+                <div id="divModoVitrine" style="display: none;">
+                    <button onclick="alternarModoVitrine()" id="txtModoVitrine" style="width: 100%; padding: 10px; background: #e67e22; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts na Ordem Correta -->
+    <script src="/core/state.js"></script>
+    <script src="/core/security.js"></script>
+    <script src="/components/theme.js"></script>
+    <script src="/components/carousel.js"></script>
+    <script src="/components/modalAjustes.js"></script>
+    <script src="/components/header.js"></script>
+    <script src="/components/cart.js"></script>
+    <script src="/construtor.js"></script>
+
+    <script>
+        // Assim que o layout modular carregar, ativamos os componentes e puxamos os produtos para a busca funcionar
+        document.addEventListener('layoutPronto', async () => {
+            initTheme();
+            initHeaderEvents();
+            initAjustesModal();
+            await carregarProdutosGlobais(); // Alimenta a busca do topo
+        });
+
+        function enviarCadastroWhatsApp(event) {
+            event.preventDefault();
+            const nome = document.getElementById('cadNome').value.trim();
+            const responsavel = document.getElementById('cadResponsavel').value.trim();
+            const telefone = document.getElementById('cadTelefone').value.trim();
+            const tipoComercio = document.getElementById('cadTipoComercio').value.trim();
+            const endereco = document.getElementById('cadEndereco').value.trim();
+
+            const phone = "5543984051934"; 
+
+            let mensagem = `*SOLICITAÇÃO DE CADASTRO - LOJISTA*\n\n`;
+            mensagem += `• *Empresa/Nome:* ${nome}\n`;
+            mensagem += `• *Responsável:* ${responsavel}\n`;
+            mensagem += `• *Telefone:* ${telefone}\n`;
+            mensagem += `• *Tipo de Comércio:* ${tipoComercio}\n`;
+            mensagem += `• *Endereço:* ${endereco}\n\n`;
+            mensagem += `Olá! Gostaria de solicitar o meu cadastro e a senha de acesso para visualizar os preços no site da Tip Arts.`;
+
+            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(mensagem)}`, '_blank');
+        }
+    </script>
+</body>
+</html>

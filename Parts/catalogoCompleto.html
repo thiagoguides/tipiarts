@@ -1,0 +1,51 @@
+<main class="catalog-page-container">
+    <div class="catalog-layout">
+        
+        <!-- COLUNA ESQUERDA: FILTROS -->
+        <aside class="filters-sidebar">
+            <h3><i class="fa-solid fa-filter"></i> Filtrar Categorias</h3>
+            
+            <div class="filter-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="categoria" value="todos" checked onchange="filtrarProdutos()"> Todos os Produtos
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" name="categoria" value="tampa" onchange="filtrarProdutos()"> Caixas com Tampa
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" name="categoria" value="sextavada" onchange="filtrarProdutos()"> Caixas Sextavadas
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" name="categoria" value="coracao" onchange="filtrarProdutos()"> Caixas Coração
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" name="categoria" value="vinho" onchange="filtrarProdutos()"> Caixas para Vinho
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" name="categoria" value="organizadora" onchange="filtrarProdutos()"> Organizadores & Divisórias
+                </label>
+            </div>
+        </aside>
+
+        <!-- COLUNA DIREITA: PRODUTOS E ORDENAÇÃO -->
+        <section class="catalog-content">
+            <div class="catalog-toolbar">
+                <h2 class="section-title"><i class="fa-solid fa-layer-group"></i> Catálogo Completo</h2>
+                
+                <div class="sort-box">
+                    <label for="sortSelect"><i class="fa-solid fa-arrow-down-wide-short"></i> Ordenar por:</label>
+                    <select id="sortSelect" onchange="filtrarProdutos()">
+                        <option value="relevancia">Em Alta (Relevância)</option>
+                        <option value="menor-preco">Menor Preço</option>
+                        <option value="maior-preco">Maior Preço</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="product-grid" id="fullProductGrid">
+                <!-- Preenchido via script -->
+            </div>
+        </section>
+
+    </div>
+</main>
