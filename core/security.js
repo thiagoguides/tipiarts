@@ -31,12 +31,42 @@ function apagarChaveCookie() {
     chaveSessaoAtiva = null;
 }
 
+// --- AUXILIAR DE CAMPO ---
+function pegarCampoPrecoCriptografado(produto) {
+    if (!produto) return null;
+    return produto.precoCriptografado || produto.preco || null;
+}
+
 // --- DESCRIPTOGRAFIA E VALIDAÇÃO ---
 function descriptografarTexto(textoCriptografado, senha) {
     if (!textoCriptografado || !senha) return null;
     try {
-        const bytes = CryptoJS.AES.decrypt(textoCriptografado, senha);
-        const originalText = bytes.toString(CryptoJS.enc.Utf8);
+        // 1. Converte o Base64 vindo do C# para WordArray
+        const rawBytes = CryptoJS.enc.Base64.parse(textoCriptografado);
+        const totalWords = rawBytes.sigBytes / 4;
+
+        // O IV tem 16 bytes (4 words de 32 bits); é necessário haver dados após o IV
+        if (totalWords <= 4) return null;
+
+        // 2. Separa os 16 primeiros bytes (IV) e o restante (dados criptografados)
+        const iv = CryptoJS.lib.WordArray.create(rawBytes.words.slice(0, 4), 16);
+        const ciphertext = CryptoJS.lib.WordArray.create(rawBytes.words.slice(4), rawBytes.sigBytes - 16);
+
+        // 3. Gera a chave de 256 bits via SHA-256 da senha (igual ao C#)
+        const key = CryptoJS.SHA256(senha);
+
+        // 4. Decifra com AES-256-CBC e PKCS7
+        const decrypted = CryptoJS.AES.decrypt(
+            { ciphertext: ciphertext },
+            key,
+            {
+                iv: iv,
+                mode: CryptoJS.mode.CBC,
+                padding: CryptoJS.pad.Pkcs7
+            }
+        );
+
+        const originalText = decrypted.toString(CryptoJS.enc.Utf8);
         return originalText || null;
     } catch (e) {
         return null;
@@ -53,9 +83,10 @@ function validarFormatoPreco(texto) {
 // Verifica se os preços devem estar visíveis com base na chave e no modo vitrine
 function isPrecosVisiveis() {
     const modoVitrineAtivo = sessionStorage.getItem('tiparts_modo_vitrine') === 'true';
-    
+
     if (chaveSessaoAtiva && window.products && window.products.length > 0) {
-        const teste = descriptografarTexto(window.products[0].precoCriptografado, chaveSessaoAtiva);
+        const cipher = pegarCampoPrecoCriptografado(window.products[0]);
+        const teste = descriptografarTexto(cipher, chaveSessaoAtiva);
         if (validarFormatoPreco(teste) && !modoVitrineAtivo) {
             return true;
         }
@@ -66,8 +97,9 @@ window.isPrecosVisiveis = isPrecosVisiveis;
 
 // Retorna o valor numérico real do produto (0 se oculto)
 function obterPrecoReal(produto) {
-    if (!isPrecosVisiveis() || !produto || !produto.precoCriptografado) return 0;
-    const precoStr = descriptografarTexto(produto.precoCriptografado, chaveSessaoAtiva);
+    const cipher = pegarCampoPrecoCriptografado(produto);
+    if (!isPrecosVisiveis() || !cipher) return 0;
+    const precoStr = descriptografarTexto(cipher, chaveSessaoAtiva);
     return parseFloat(precoStr) || 0;
 }
 window.obterPrecoReal = obterPrecoReal;
@@ -89,7 +121,8 @@ function tentarDescriptografarPrecos() {
     }
 
     const primeiroProduto = window.products[0];
-    const testeDescriptografado = descriptografarTexto(primeiroProduto.precoCriptografado, senhaDigitada);
+    const cipher = pegarCampoPrecoCriptografado(primeiroProduto);
+    const testeDescriptografado = descriptografarTexto(cipher, senhaDigitada);
 
     if (validarFormatoPreco(testeDescriptografado)) {
         chaveSessaoAtiva = senhaDigitada;
@@ -97,13 +130,12 @@ function tentarDescriptografarPrecos() {
         sessionStorage.removeItem('tiparts_modo_vitrine');
 
         inputSenha.value = "";
-        
+
         // Atualiza a interface gráfica se as funções existirem
         if (typeof atualizarEstadoPrecosUI === 'function') atualizarEstadoPrecosUI();
         if (typeof renderProducts === 'function') renderProducts(window.products);
         if (typeof updateCartUI === 'function') updateCartUI();
 
-        alert("Senha correta! Preços liberados por 3 dias.");
     } else {
         alert("Senha incorreta ou inválida!");
     }
@@ -113,7 +145,7 @@ window.tentarDescriptografarPrecos = tentarDescriptografarPrecos;
 function alternarModoVitrine() {
     const modoAtual = sessionStorage.getItem('tiparts_modo_vitrine') === 'true';
     sessionStorage.setItem('tiparts_modo_vitrine', !modoAtual);
-    
+
     if (typeof atualizarEstadoPrecosUI === 'function') atualizarEstadoPrecosUI();
     if (typeof renderProducts === 'function') renderProducts(window.products);
     if (typeof updateCartUI === 'function') updateCartUI();
@@ -125,7 +157,7 @@ function atualizarEstadoPrecosUI() {
     const divFormSenha = document.getElementById('divFormSenha');
     const divModoVitrine = document.getElementById('divModoVitrine');
     const txtModoVitrine = document.getElementById('txtModoVitrine');
-    
+
     const precosLiberados = isPrecosVisiveis();
     const modoVitrineAtivo = sessionStorage.getItem('tiparts_modo_vitrine') === 'true';
 

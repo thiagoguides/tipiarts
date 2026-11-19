@@ -41,6 +41,12 @@ async function carregarProdutosGlobais() {
         const dados = await resposta.json();
         
         window.products = dados.map(normalizarProduto);
+
+        if (typeof window.updateCartUI === 'function') {
+            window.updateCartUI();
+        }
+
+
         return window.products;
     } catch (erro) {
         console.error("Erro ao carregar produtos.json:", erro);

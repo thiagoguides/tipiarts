@@ -30,7 +30,13 @@ document.addEventListener('layoutPronto', () => {
 });
 
 function salvarCarrinhoCookie() {
-    const dadosStr = JSON.stringify(window.cart);
+    // Persiste apenas id, quantidade e nome (fallback); o preço é sempre obtido do JSON
+    const dadosMinimos = (window.cart || []).map(item => ({
+        id: item.id,
+        quantity: item.quantity,
+        name: item.name
+    }));
+    const dadosStr = JSON.stringify(dadosMinimos);
     const d = new Date();
     d.setTime(d.getTime() + (7 * 24 * 60 * 60 * 1000)); // 7 dias
     document.cookie = `tiparts_cart=${encodeURIComponent(dadosStr)};expires=${d.toUTCString()};path=/`;
@@ -43,7 +49,18 @@ function carregarCarrinhoCookie() {
         if (c.startsWith('tiparts_cart=')) {
             try {
                 const valorDecodificado = decodeURIComponent(c.substring('tiparts_cart='.length));
-                window.cart = JSON.parse(valorDecodificado) || [];
+                const parsed = JSON.parse(valorDecodificado);
+                if (Array.isArray(parsed)) {
+                    window.cart = parsed
+                        .filter(item => item && item.id != null && Number(item.quantity) > 0)
+                        .map(item => ({
+                            id: item.id,
+                            name: item.name || '',
+                            quantity: Number(item.quantity)
+                        }));
+                } else {
+                    window.cart = [];
+                }
             } catch (e) {
                 console.error("Erro ao ler o carrinho dos cookies:", e);
                 window.cart = [];
@@ -52,40 +69,57 @@ function carregarCarrinhoCookie() {
     }
 }
 
+function obterProdutoJsonCarrinho(productId) {
+    const lista = window.products || [];
+    return lista.find(p => Number(p.id) === Number(productId)) || null;
+}
+
+function obterNomeCarrinhoItem(item) {
+    const prodJson = obterProdutoJsonCarrinho(item.id);
+    return (prodJson && prodJson.name) || item.name || `Produto #${item.id}`;
+}
+
+function obterPrecoUnitarioCarrinho(productId) {
+    const visivel = typeof isPrecosVisiveis === 'function' ? isPrecosVisiveis() : false;
+    if (!visivel) return null;
+
+    const prodJson = obterProdutoJsonCarrinho(productId);
+    if (!prodJson || typeof obterPrecoReal !== 'function') return 0;
+
+    return Number(obterPrecoReal(prodJson)) || 0;
+}
+
 function addToCart(productId) {
-    const produtosDisponiveis = window.products || [];
-    const product = produtosDisponiveis.find(p => p.id === productId);
-    
-    if (!product) {
+    const prodJson = obterProdutoJsonCarrinho(productId);
+
+    if (!prodJson) {
         console.warn("Produto não encontrado na base ao adicionar ao carrinho:", productId);
         return;
     }
 
     if (!window.cart) window.cart = [];
 
-    const itemInCart = window.cart.find(item => item.id === productId);
-    const precoUnitario = typeof obterPrecoReal === 'function' ? obterPrecoReal(product) : 0;
+    const itemInCart = window.cart.find(item => Number(item.id) === Number(productId));
 
     if (itemInCart) {
         itemInCart.quantity++;
-        itemInCart.price = precoUnitario; 
+        itemInCart.name = prodJson.name;
     } else {
         window.cart.push({
-            id: product.id,
-            name: product.name,
-            price: precoUnitario,
+            id: prodJson.id,
+            name: prodJson.name,
             quantity: 1
         });
     }
-    
+
     salvarCarrinhoCookie();
     updateCartUI();
 }
 window.addToCart = addToCart;
 
 function alterarQuantidade(productId, delta) {
-    const itemIndex = window.cart.findIndex(item => item.id === productId);
-    
+    const itemIndex = window.cart.findIndex(item => Number(item.id) === Number(productId));
+
     if (itemIndex > -1) {
         window.cart[itemIndex].quantity += delta;
         if (window.cart[itemIndex].quantity <= 0) {
@@ -110,19 +144,34 @@ async function updateCartUI() {
 
     if (!cartItemsContainer) return;
 
+    const precosVisiveis = typeof isPrecosVisiveis === 'function' ? isPrecosVisiveis() : false;
+
     if (window.cart.length === 0) {
         cartItemsContainer.innerHTML = '<p style="text-align:center; color: var(--text-muted); margin-top:20px;">Seu carrinho está vazio.</p>';
     } else {
         const templateItem = await carregarTemplateCarrinhoItem();
-        const precosVisiveis = typeof isPrecosVisiveis === 'function' ? isPrecosVisiveis() : false;
+        let totalSum = 0;
 
         let htmlItens = window.cart.map(item => {
-            const precoFormatado = precosVisiveis ? `R$ ${item.price.toFixed(2).replace('.', ',')} un.` : 'Preço sob consulta';
-            const subtotalFormatado = precosVisiveis ? `R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}` : '---';
+            const nomeItem = obterNomeCarrinhoItem(item);
+            const precoUnit = obterPrecoUnitarioCarrinho(item.id);
+            const temPreco = precosVisiveis && precoUnit !== null;
+
+            const precoFormatado = temPreco
+                ? `R$ ${precoUnit.toFixed(2).replace('.', ',')} un.`
+                : 'Preço sob consulta';
+
+            const subtotalFormatado = temPreco
+                ? `R$ ${(precoUnit * item.quantity).toFixed(2).replace('.', ',')}`
+                : '---';
+
+            if (temPreco) {
+                totalSum += precoUnit * item.quantity;
+            }
 
             return templateItem
                 .replace(/{{id}}/g, item.id)
-                .replace(/{{nome}}/g, item.name)
+                .replace(/{{nome}}/g, nomeItem)
                 .replace(/{{quantidade}}/g, item.quantity)
                 .replace(/{{precoFormatado}}/g, precoFormatado)
                 .replace(/{{subtotalFormatado}}/g, subtotalFormatado);
@@ -136,12 +185,17 @@ async function updateCartUI() {
         `;
 
         cartItemsContainer.innerHTML = htmlItens;
+
+        if (cartTotalEl) {
+            cartTotalEl.innerText = precosVisiveis
+                ? `R$ ${totalSum.toFixed(2).replace('.', ',')}`
+                : 'R$ ---';
+        }
+        return;
     }
 
     if (cartTotalEl) {
-        const precosVisiveis = typeof isPrecosVisiveis === 'function' ? isPrecosVisiveis() : false;
-        const totalSum = window.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        cartTotalEl.innerText = precosVisiveis ? `R$ ${totalSum.toFixed(2).replace('.', ',')}` : 'R$ ---';
+        cartTotalEl.innerText = precosVisiveis ? 'R$ 0,00' : 'R$ ---';
     }
 }
 window.updateCartUI = updateCartUI;
@@ -174,18 +228,28 @@ function sendToWhatsApp() {
 
     let message = `pedido gerado pelo site ${dataFormatada} as ${horaFormatada}\n`;
     message += `código do pedido= "${codigoCompacto}"\n\n`;
-    
+
     message += `*Itens do Pedido (Conferência):*\n`;
-    
+
     const precosVisiveis = typeof isPrecosVisiveis === 'function' ? isPrecosVisiveis() : false;
+    let totalGeral = 0;
+
     window.cart.forEach(item => {
-        const sub = precosVisiveis ? `R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}` : 'Preço sob consulta';
-        message += `• ${item.quantity}x ${item.name} (${sub})\n`;
+        const nomeItem = obterNomeCarrinhoItem(item);
+        const precoUnit = obterPrecoUnitarioCarrinho(item.id);
+        const temPreco = precosVisiveis && precoUnit !== null;
+
+        if (temPreco) {
+            const subtotal = precoUnit * item.quantity;
+            totalGeral += subtotal;
+            message += `• ${item.quantity}x ${nomeItem} (R$ ${subtotal.toFixed(2).replace('.', ',')})\n`;
+        } else {
+            message += `• ${item.quantity}x ${nomeItem} (Preço sob consulta)\n`;
+        }
     });
 
     if (precosVisiveis) {
-        const total = window.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        message += `\n*Total Estimado:* R$ ${total.toFixed(2).replace('.', ',')}`;
+        message += `\n*Total Estimado:* R$ ${totalGeral.toFixed(2).replace('.', ',')}`;
     }
 
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
@@ -194,7 +258,7 @@ function sendToWhatsApp() {
         window.cart = [];
         document.cookie = "tiparts_cart=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     }
-    
+
     updateCartUI();
     toggleCart();
 }
