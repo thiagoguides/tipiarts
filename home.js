@@ -60,7 +60,8 @@ function renderProducts(items) {
             .replace(/{{nome}}/g, p.name)
             .replace(/{{descricao}}/g, p.desc)
             .replace(/{{medidas}}/g, p.medidas || "")
-            .replace(/{{precoFormatado}}/g, precoFormatado);
+            .replace(/{{precoFormatado}}/g, precoFormatado)
+            .replace(/{{fotoCapa}}/g, p.fotoCapa );
     }).join('');
 }
 window.renderProducts = renderProducts;

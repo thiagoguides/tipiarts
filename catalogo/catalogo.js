@@ -134,6 +134,7 @@ function renderizarGridCatalogo(items) {
             .replace(/{{nome}}/g, p.name)
             .replace(/{{descricao}}/g, p.desc)
             .replace(/{{medidas}}/g, p.medidas)
+            .replace(/{{fotoCapa}}/g, p.fotoCapa )
             .replace(/{{precoFormatado}}/g, precoFormatado);
     }).join('');
 }

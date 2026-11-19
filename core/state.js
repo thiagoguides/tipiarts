@@ -25,6 +25,7 @@ function normalizarProduto(item) {
         category: item.categoria,
         categories: Array.isArray(item.categoria) ? item.categoria : [item.categoria || 'geral'],
         textoDescricaoCompleto: item.textoDescricaoCompleto || item.descricao,
+        fotoCapa: item.fotoCapa || '<i class="fa-solid fa-box-open"></i>',
         fotos: Array.isArray(item.fotos) && item.fotos.length > 0 ? item.fotos : (item.fotoCapa ? [item.fotoCapa] : []),
         nivel: item.nivel || 0
     };

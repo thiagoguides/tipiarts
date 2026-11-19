@@ -70,14 +70,42 @@ function preencherDadosNaTela(p) {
     const mainImg = document.getElementById('mainProductImage');
     const thumbGallery = document.getElementById('thumbnailGallery');
 
-    if (p.fotos.length > 0) {
-        mainImg.src = `/${p.fotos[0]}`;
+    // Garante que o caminho começa com "/" sem duplicar caso já tenha
+    const normalizarCaminho = (caminho) => {
+        if (!caminho) return '';
+        return caminho.startsWith('/') ? caminho : `/${caminho}`;
+    };
+
+    // Monta a lista unificada colocando a fotoCapa primeiro com destaque
+    const todasImagens = [];
+    const capaNormalizada = normalizarCaminho(p.fotoCapa);
+
+    if (capaNormalizada) {
+        todasImagens.push({ url: capaNormalizada, isCapa: true });
+    }
+
+    if (Array.isArray(p.fotos)) {
+        p.fotos.forEach(foto => {
+            const fotoNormalizada = normalizarCaminho(foto);
+            if (fotoNormalizada && fotoNormalizada !== capaNormalizada) {
+                todasImagens.push({ url: fotoNormalizada, isCapa: false });
+            }
+        });
+    }
+
+    if (todasImagens.length > 0) {
+        // Carrega a primeira imagem (Capa, se existir) como principal
+        mainImg.src = todasImagens[0].url;
         mainImg.style.display = 'block';
 
-        if (p.fotos.length > 1) {
-            thumbGallery.innerHTML = p.fotos.map((foto, index) => `
-                <div class="thumbnail-item ${index === 0 ? 'active' : ''}" onclick="trocarFotoPrincipal('/${foto}', this)">
-                    <img src="/${foto}" alt="Miniatura ${index + 1}">
+        // Exibe as miniaturas se houver mais de 1 imagem (ou mesmo se só tiver a capa, para manter o destaque)
+        if (todasImagens.length > 1) {
+            thumbGallery.innerHTML = todasImagens.map((img, index) => `
+                <div class="thumbnail-item ${img.isCapa ? 'thumbnail-capa' : ''} ${index === 0 ? 'active' : ''}" 
+                     onclick="trocarFotoPrincipal('${img.url}', this)"
+                     title="${img.isCapa ? 'Foto Principal (Capa)' : `Foto ${index + 1}`}">
+                    <img src="${img.url}" alt="${img.isCapa ? 'Capa do produto' : `Miniatura ${index + 1}`}">
+                    ${img.isCapa ? '<span class="capa-badge">Capa</span>' : ''}
                 </div>
             `).join('');
         } else {
@@ -157,6 +185,7 @@ function carregarRecomendacoes(todos, atual) {
             .replace(/{{nome}}/g, p.name)
             .replace(/{{descricao}}/g, p.desc)
             .replace(/{{medidas}}/g, p.medidas || "")
+            .replace(/{{fotoCapa}}/g, p.fotoCapa )
             .replace(/{{precoFormatado}}/g, precoFormatado);
     }).join('');
 }

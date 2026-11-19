@@ -4,13 +4,13 @@
     "nome": "Caixa MDF com tampa",
     "descricao": "Caixa pequena em mdf com tampa",
     "medidas": "10 x 15 x 5 cm",
-    "fotoCapa": "fotos/produtos/1-capa-caixa-mdf-com-tampa.jpg",
+    "fotoCapa": "/fotos/produtos/1-capa-caixa-mdf-com-tampa.jpg",
     "fotos": [
-      "fotos/produtos/1-caixa-mdf-com-tampa-1.jpg",
-      "fotos/produtos/1-caixa-mdf-com-tampa-2.jpg",
-      "fotos/produtos/1-caixa-mdf-com-tampa-3.jpg",
-      "fotos/produtos/1-caixa-mdf-com-tampa-4.jpg",
-      "fotos/produtos/1-caixa-mdf-com-tampa-5.jpg"
+      "/fotos/produtos/1-caixa-mdf-com-tampa-1.jpg",
+      "/fotos/produtos/1-caixa-mdf-com-tampa-2.jpg",
+      "/fotos/produtos/1-caixa-mdf-com-tampa-3.jpg",
+      "/fotos/produtos/1-caixa-mdf-com-tampa-4.jpg",
+      "/fotos/produtos/1-caixa-mdf-com-tampa-5.jpg"
     ],
     "preco": "bb2d4GoMKXWOwrF88svx9jNMOH9Mxv77hjRJvlDXmkc=",
     "categoria": "1",
@@ -22,13 +22,13 @@
     "nome": "Caixa MDF com tampa",
     "descricao": "Caixa media em mdf com tampa",
     "medidas": "15 x 20 x 5 cm",
-    "fotoCapa": "fotos/produtos/2-capa-caixa-mdf-com-tampa.jpg",
+    "fotoCapa": "/fotos/produtos/2-capa-caixa-mdf-com-tampa.jpg",
     "fotos": [
-      "fotos/produtos/2-caixa-mdf-com-tampa-1.jpg",
-      "fotos/produtos/2-caixa-mdf-com-tampa-2.jpg",
-      "fotos/produtos/2-caixa-mdf-com-tampa-3.jpg",
-      "fotos/produtos/2-caixa-mdf-com-tampa-4.jpg",
-      "fotos/produtos/2-caixa-mdf-com-tampa-5.jpg"
+      "/fotos/produtos/2-caixa-mdf-com-tampa-1.jpg",
+      "/fotos/produtos/2-caixa-mdf-com-tampa-2.jpg",
+      "/fotos/produtos/2-caixa-mdf-com-tampa-3.jpg",
+      "/fotos/produtos/2-caixa-mdf-com-tampa-4.jpg",
+      "/fotos/produtos/2-caixa-mdf-com-tampa-5.jpg"
     ],
     "preco": "gwKSPQRhDloeVoo3VUi0lg6r67UnAWAQPITPouZooK8=",
     "categoria": "1",
@@ -40,13 +40,13 @@
     "nome": "Caixa MDF com Tampa",
     "descricao": "Caixa Organizadora em MDF 20x20x5cm com Tampa",
     "medidas": "20 x 20 x 5 cm",
-    "fotoCapa": "fotos/produtos/3-capa-caixa-mdf-com-tampa.jpg",
+    "fotoCapa": "/fotos/produtos/3-capa-caixa-mdf-com-tampa.jpg",
     "fotos": [
-      "fotos/produtos/3-caixa-mdf-com-tampa-1.jpg",
-      "fotos/produtos/3-caixa-mdf-com-tampa-2.jpg",
-      "fotos/produtos/3-caixa-mdf-com-tampa-3.jpg",
-      "fotos/produtos/3-caixa-mdf-com-tampa-4.jpg",
-      "fotos/produtos/3-caixa-mdf-com-tampa-5.jpg"
+      "/fotos/produtos/3-caixa-mdf-com-tampa-1.jpg",
+      "/fotos/produtos/3-caixa-mdf-com-tampa-2.jpg",
+      "/fotos/produtos/3-caixa-mdf-com-tampa-3.jpg",
+      "/fotos/produtos/3-caixa-mdf-com-tampa-4.jpg",
+      "/fotos/produtos/3-caixa-mdf-com-tampa-5.jpg"
     ],
     "preco": "OwlwTi9ERxz/9vVDo0rQUOX12J5xkdBCp3Z94UWKmcA=",
     "categoria": "1",
